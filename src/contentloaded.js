@@ -38,7 +38,8 @@ function contentLoaded(win, fn) {
 
 	if (doc.readyState == 'complete') fn.call(win, 'lazy');
 	else {
-		if (doc.createEventObject && root.doScroll) {
+		//only for ie6-8, as ie9+ should use addEventListener[DOMContentLoaded]
+		if (doc.createEventObject && root.doScroll && !doc.addEventListener) {
 			try { top = !win.frameElement; } catch(e) { }
 			if (top) poll();
 		}
