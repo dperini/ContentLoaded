@@ -38,7 +38,7 @@ function contentLoaded(win, fn) {
 
 	if (doc.readyState == 'complete') fn.call(win, 'lazy');
 	else {
-		if (doc.createEventObject && root.doScroll) {
+		if (add == 'attachEvent' && root.doScroll) {
 			try { top = !win.frameElement; } catch(e) { }
 			if (top) poll();
 		}
