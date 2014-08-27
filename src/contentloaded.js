@@ -18,12 +18,13 @@
 function contentLoaded(win, fn) {
 
 	var done = false, top = true,
+	modern = doc.addEventListener,
 
 	doc = win.document, root = doc.documentElement,
 
-	add = doc.addEventListener ? 'addEventListener' : 'attachEvent',
-	rem = doc.addEventListener ? 'removeEventListener' : 'detachEvent',
-	pre = doc.addEventListener ? '' : 'on',
+	add = modern ? 'addEventListener' : 'attachEvent',
+	rem = modern ? 'removeEventListener' : 'detachEvent',
+	pre = modern ? '' : 'on',
 
 	init = function(e) {
 		if (e.type == 'readystatechange' && doc.readyState != 'complete') return;
@@ -38,7 +39,7 @@ function contentLoaded(win, fn) {
 
 	if (doc.readyState == 'complete') fn.call(win, 'lazy');
 	else {
-		if (add == 'attachEvent' && root.doScroll) {
+		if (modern && root.doScroll) {
 			try { top = !win.frameElement; } catch(e) { }
 			if (top) poll();
 		}
