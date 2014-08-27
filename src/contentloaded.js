@@ -18,17 +18,38 @@
 function contentLoaded(win, fn) {
 
 	var done = false, top = true,
-
+	
+	addEventListener = 'addEventListener',
+	
+	modern = doc[addEventListener],
+	
 	doc = win.document, root = doc.documentElement,
-
-	add = doc.addEventListener ? 'addEventListener' : 'attachEvent',
-	rem = doc.addEventListener ? 'removeEventListener' : 'detachEvent',
-	pre = doc.addEventListener ? '' : 'on',
-
+	
+	adder = (function () {
+		return modern
+		?	function (o, e, fnc) {o[addEventListener] (e, fnc, false)}
+		:	function (o, e, fnc) {o['attachEvent'] ('on' + e, fnc)}
+	})(),
+	
+	remover = (function () {
+		return modern
+		?	function (o, e, fnc) {o['removeEventListener'] (e, fnc, false)}
+		:	function (o, e, fnc) {o['detachEvent'] ('on' + e, fnc)}
+	})(),
+	
+	events = function (adderOrRemover) {
+		modern
+			? adderOrRemover (doc, 'DOMContentLoaded', init)
+			: adderOrRemover (doc, 'readystatechange', init)
+		adderOrRemover (win, 'load', init)
+	},
+	
 	init = function(e) {
 		if (e.type == 'readystatechange' && doc.readyState != 'complete') return;
-		(e.type == 'load' ? win : doc)[rem](pre + e.type, init, false);
-		if (!done && (done = true)) fn.call(win, e.type || e);
+		if (!done && (done = true)) {
+			events (remover);
+			fn.call(win, e.type || e);
+		}
 	},
 
 	poll = function() {
@@ -38,13 +59,11 @@ function contentLoaded(win, fn) {
 
 	if (doc.readyState == 'complete') fn.call(win, 'lazy');
 	else {
-		if (add == 'attachEvent' && root.doScroll) {
+		if (!modern && root.doScroll) {
 			try { top = !win.frameElement; } catch(e) { }
 			if (top) poll();
 		}
-		doc[add](pre + 'DOMContentLoaded', init, false);
-		doc[add](pre + 'readystatechange', init, false);
-		win[add](pre + 'load', init, false);
+		events (adder)
 	}
 
 }
