@@ -59,7 +59,7 @@ function contentLoaded(win, fn) {
 
 	if (doc.readyState == 'complete') fn.call(win, 'lazy');
 	else {
-		if (modern && root.doScroll) {
+		if (!modern && root.doScroll) {
 			try { top = !win.frameElement; } catch(e) { }
 			if (top) poll();
 		}
