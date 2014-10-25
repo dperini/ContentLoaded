@@ -1,0 +1,33 @@
+{
+  "name": "ContentLoaded",
+  "version": "1.2",
+  "homepage": "https://github.com/dperini/ContentLoaded",
+  "authors": [
+    "Diego Perini <diego.perini@gmail.com>"
+  ],
+  "description": "A cross-browser wrapper for DOMContentLoaded",
+  "main": "src/contentloaded.min.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "ie",
+    "boot",
+    "load",
+    "ready",
+    "onload",
+    "domready",
+    "crossbrowser",
+    "cross-browser",
+    "readystatechange",
+    "domcontentloaded"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
